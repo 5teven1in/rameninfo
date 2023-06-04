@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.3/tocas.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.3/tocas.min.js"></script>
+</head>
+
+<body>
+    <div class="ts-app-topbar">
+        <div class="start">
+            <div class="item is-text">拉麵資訊.台灣</div>
+        </div>
+        <div class="end">
+            <a class="item">
+                <span class="ts-icon is-ellipsis-vertical-icon"></span>
+            </a>
+        </div>
+    </div>
+
+    <div class="ts-content is-vertically-padded">
+        <div class="ts-progress is-processing">
+            <div id="progress-bar" class="bar" style="--value: 0">
+                <div class="text">0%</div>
+            </div>
+        </div>
+        <div class="ts-row" style="padding-top: 20px;">
+            <div class="column is-fluid">
+                <div class="ts-input is-fluid">
+                    <input type="text" class="input" placeholder="豚骨 / 雞白 / 沾麵 / 名店 / ..." />
+                </div>
+            </div>
+            <div class="column">
+                <button class="ts-button is-icon" data-tooltip="搜尋">
+                    <span class="ts-icon is-magnifying-glass-icon"></span>
+                </button>
+            </div>
+            <div class="column">
+                <button onclick="gotoLucky()" class="ts-button is-icon" data-tooltip="好手氣">
+                    <span class="ts-icon is-shuffle-icon"></span>
+                </button>
+            </div>
+        </div>
+        <div class="ts-wrap is-center-aligned is-middle-aligned" style="padding-top: 20px; padding-bottom: 10px;">
+            <div class="ts-select is-solid">
+                <select>
+                    <option>不限時間</option>
+                    <option>今日營業</option>
+                    <option>現在營業</option>
+                </select>
+            </div>
+            <div class="ts-select is-solid">
+                <select id="show-eat-option" onchange="updateState([], [], refresh=true)">
+                    <option>顯示所有</option>
+                    <option>已經吃過</option>
+                    <option>還沒吃過</option>
+                </select>
+            </div>
+            <button class="ts-button is-icon is-negative is-outlined" data-toggle="modal:is-visible">
+                <span class="ts-icon is-trash-icon"></span>
+            </button>
+            <div class="ts-modal" data-name="modal">
+                <div class="content">
+                    <div class="ts-content is-padded">
+                        <p>你確定要清除所有資料嗎？</p>
+                        <p>你確定要清除所有資料嗎？</p>
+                        <p>你確定要清除所有資料嗎？</p>
+                    </div>
+                    <div class="ts-divider"></div>
+                    <div class="ts-content is-tertiary is-horizontally-padded is-end-aligned">
+                        <button class="ts-button is-negative is-outlined" data-toggle="modal:is-visible"
+                            onclick="resetState()">
+                            確定
+                        </button>
+                        <button class="ts-button" data-toggle="modal:is-visible">
+                            關閉
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ts-box">
+            <table class="ts-table is-celled is-striped">
+                <thead>
+                    <tr>
+                        <th class="is-collapsed"></th>
+                        <th class="is-collapsed mobile:u-hidden">營業時間</th>
+                        <th>名稱</th>
+                        <th>預約</th>
+                        <th>排隊登記</th>
+                        <th class="mobile:u-hidden">標籤</th>
+                    </tr>
+                </thead>
+                <tbody id="ramen-info-list"></tbody>
+            </table>
+            <div class="ts-wrap is-center-aligned">
+                <div id="skeleton" class="ts-loading"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="./assets/js/awesome.js"></script>
+<script>
+    function updateState(add_list, sub_list, refresh = false) {
+        checked_list = JSON.parse(localStorage.getItem("checked_list") || "[]");
+        if (refresh) {
+            const show_eat_option = document.getElementById("show-eat-option").value;
+            if (show_eat_option === "顯示所有" || show_eat_option === "還沒吃過") {
+                [...Array(awesome_list.length).keys()].forEach(element => {
+                    document.getElementById(`ramen-info-item-${element}`).classList.remove("u-hidden");
+                });
+            }
+            else if (show_eat_option === "已經吃過") {
+                [...Array(awesome_list.length).keys()].forEach(element => {
+                    document.getElementById(`ramen-info-item-${element}`).classList.add("u-hidden");
+                });
+            }
+            checked_list.forEach(element => {
+                document.getElementById(`item-${element}-checked`).checked = true;
+                if (show_eat_option === "還沒吃過") {
+                    document.getElementById(`ramen-info-item-${element}`).classList.add("u-hidden");
+                }
+                else if (show_eat_option === "已經吃過") {
+                    document.getElementById(`ramen-info-item-${element}`).classList.remove("u-hidden");
+                }
+            });
+        }
+        if (add_list.length > 0 || sub_list.length > 0) {
+            const checked_set = new Set(checked_list);
+            add_list.forEach(element => {
+                checked_set.add(element);
+                document.getElementById(`item-${element}-checked`).checked = true;
+            });
+            sub_list.forEach(element => {
+                checked_set.delete(element);
+                document.getElementById(`item-${element}-checked`).checked = false;
+            });
+            checked_list = [...checked_set];
+        }
+        const progress_ratio = Math.round(checked_list.length / awesome_list.length * 100);
+        document.getElementById("progress-bar").style = `--value: ${progress_ratio}`;
+        document.getElementById("progress-bar").firstElementChild.innerHTML = `${progress_ratio}%`;
+        localStorage.setItem("checked_list", JSON.stringify(checked_list));
+    }
+    function resetState() {
+        updateState([], [...Array(awesome_list.length).keys()]);
+    }
+    function gotoLucky() {
+        const luckyID = "ramen-info-item-" + Math.floor(Math.random() * awesome_list.length);
+        document.getElementById(luckyID).classList.add("is-indicated");
+        location.hash = "#" + luckyID;
+    }
+    function changeItem(index) {
+        if (document.getElementById(`item-${index}-checked`).checked) {
+            updateState([index], []);
+        }
+        else {
+            updateState([], [index]);
+        }
+    }
+    awesome_list.forEach((element, index) => {
+        document.getElementById("ramen-info-list").innerHTML += `
+        <tr id="ramen-info-item-${index}">
+            <td>
+                <label class="ts-checkbox">
+                    <input type="checkbox" id="item-${index}-checked" onchange="changeItem(${index})"/>
+                </label>
+            </td>
+            <td class="mobile:u-hidden"><span class="ts-icon is-battery-full-icon"></span></td>
+            <td>
+                <a href="https://google.com/" target="_blank"
+                    rel="noopener">${element["名稱"]}</a>
+            </td>
+            <td>${element["預約"] || "N/A"}</td>
+            <td>${element["排隊登記"] || "N/A"}</td>
+            <td class="mobile:u-hidden">${element["標籤"] || "N/A"}</td>
+        </tr>
+        `;
+    });
+    document.getElementById("skeleton").classList.add("u-hidden");
+    updateState([], [], refresh = true);
+</script>
+
+</html>
