@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.3/tocas.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.3/tocas.min.js"></script>
+    <style>
+        #main-blk {
+            padding-bottom: 3rem;
+        }
+
+        #go-page-top-btn {
+            position: fixed;
+            right: 10px;
+            bottom: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,7 +31,7 @@
         </div>
     </div>
 
-    <div class="ts-content is-vertically-padded">
+    <div id="main-blk" class="ts-content is-vertically-padded">
         <div class="ts-progress is-processing">
             <div id="progress-bar" class="bar" style="--value: 0">
                 <div class="text">0%</div>
@@ -100,10 +111,19 @@
             </div>
         </div>
     </div>
+    <div id="go-page-top-btn" class="u-hidden">
+        <button onclick="goPageTop()" class="ts-button is-icon" data-tooltip="回頂端">
+            <span class="ts-icon is-arrow-up-icon"></span>
+        </button>
+    </div>
 </body>
 
 <script src="./assets/js/awesome.js"></script>
 <script>
+    function goPageTop() {
+        window.scrollTo(0, 0);
+    }
+
     function updateState(add_list, sub_list, refresh = false) {
         checked_list = JSON.parse(localStorage.getItem("checked_list") || "[]");
         if (refresh) {
@@ -161,27 +181,42 @@
             updateState([], [index]);
         }
     }
-    awesome_list.forEach((element, index) => {
-        document.getElementById("ramen-info-list").innerHTML += `
-        <tr id="ramen-info-item-${index}">
-            <td>
-                <label class="ts-checkbox">
-                    <input type="checkbox" id="item-${index}-checked" onchange="changeItem(${index})"/>
-                </label>
-            </td>
-            <td class="mobile:u-hidden"><span class="ts-icon is-battery-full-icon"></span></td>
-            <td>
-                <a href="https://google.com/" target="_blank"
-                    rel="noopener">${element["名稱"]}</a>
-            </td>
-            <td>${element["預約"] || "N/A"}</td>
-            <td>${element["排隊登記"] || "N/A"}</td>
-            <td class="mobile:u-hidden">${element["標籤"] || "N/A"}</td>
-        </tr>
-        `;
-    });
-    document.getElementById("skeleton").classList.add("u-hidden");
-    updateState([], [], refresh = true);
+
+    function init() {
+        awesome_list.forEach((element, index) => {
+            document.getElementById("ramen-info-list").innerHTML += `
+            <tr id="ramen-info-item-${index}">
+                <td>
+                    <label class="ts-checkbox">
+                        <input type="checkbox" id="item-${index}-checked" onchange="changeItem(${index})"/>
+                    </label>
+                </td>
+                <td class="mobile:u-hidden"><span class="ts-icon is-battery-full-icon"></span></td>
+                <td>
+                    <a href="https://google.com/" target="_blank"
+                        rel="noopener">${element["名稱"]}</a>
+                </td>
+                <td>${element["預約"] || "N/A"}</td>
+                <td>${element["排隊登記"] || "N/A"}</td>
+                <td class="mobile:u-hidden">${element["標籤"] || "N/A"}</td>
+            </tr>
+            `;
+        });
+        document.getElementById("skeleton").classList.add("u-hidden");
+        updateState([], [], refresh = true);
+
+        window.onscroll = () => {
+            const goPageTopBtn = document.querySelector("#go-page-top-btn");
+            if (window.pageYOffset === 0) {
+                goPageTopBtn.classList.add('u-hidden');
+                return;
+            }
+
+            goPageTopBtn.classList.remove('u-hidden');
+        };
+    }
+
+    init();
 </script>
 
 </html>
