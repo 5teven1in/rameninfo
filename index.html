@@ -40,11 +40,15 @@
         <div class="ts-row" style="padding-top: 20px;">
             <div class="column is-fluid">
                 <div class="ts-input is-fluid">
-                    <input type="text" class="input" placeholder="豚骨 / 雞白 / 沾麵 / 名店 / ..." />
+                    <input
+                        id="search-keyword"
+                        type="text"
+                        class="input"
+                        placeholder="豚骨 / 雞白 / 沾麵 / 名店 / ..." />
                 </div>
             </div>
             <div class="column">
-                <button class="ts-button is-icon" data-tooltip="搜尋">
+                <button id="search-btn" onclick="search()" class="ts-button is-icon" data-tooltip="搜尋">
                     <span class="ts-icon is-magnifying-glass-icon"></span>
                 </button>
             </div>
@@ -63,7 +67,7 @@
                 </select>
             </div>
             <div class="ts-select is-solid">
-                <select id="show-eat-option" onchange="updateState([], [], refresh=true)">
+                <select id="show-eat-option" onchange="search()">
                     <option>顯示所有</option>
                     <option>已經吃過</option>
                     <option>還沒吃過</option>
@@ -82,7 +86,7 @@
                     <div class="ts-divider"></div>
                     <div class="ts-content is-tertiary is-horizontally-padded is-end-aligned">
                         <button class="ts-button is-negative is-outlined" data-toggle="modal:is-visible"
-                            onclick="resetState()">
+                            onclick="resetItemState()">
                             確定
                         </button>
                         <button class="ts-button" data-toggle="modal:is-visible">
@@ -120,71 +124,128 @@
 
 <script src="./assets/js/awesome.js"></script>
 <script>
+    function getItemCheckedSet() {
+        return new Set(JSON.parse(localStorage.getItem('checked_list') || '[]'));
+    }
+
     function goPageTop() {
         window.scrollTo(0, 0);
     }
 
-    function updateState(add_list, sub_list, refresh = false) {
-        checked_list = JSON.parse(localStorage.getItem("checked_list") || "[]");
-        if (refresh) {
-            const show_eat_option = document.getElementById("show-eat-option").value;
-            if (show_eat_option === "顯示所有" || show_eat_option === "還沒吃過") {
-                [...Array(awesome_list.length).keys()].forEach(element => {
-                    document.getElementById(`ramen-info-item-${element}`).classList.remove("u-hidden");
-                });
-            }
-            else if (show_eat_option === "已經吃過") {
-                [...Array(awesome_list.length).keys()].forEach(element => {
-                    document.getElementById(`ramen-info-item-${element}`).classList.add("u-hidden");
-                });
-            }
-            checked_list.forEach(element => {
-                document.getElementById(`item-${element}-checked`).checked = true;
-                if (show_eat_option === "還沒吃過") {
-                    document.getElementById(`ramen-info-item-${element}`).classList.add("u-hidden");
+    function search() {
+        function isMatchKeyword(keyword, item) {
+            for (const key in item) {
+                if (item[key] !== null && item[key].indexOf(searchKeyword) >= 0) {
+                    return true;
                 }
-                else if (show_eat_option === "已經吃過") {
-                    document.getElementById(`ramen-info-item-${element}`).classList.remove("u-hidden");
-                }
-            });
+            }
+
+            return false;
         }
-        if (add_list.length > 0 || sub_list.length > 0) {
-            const checked_set = new Set(checked_list);
-            add_list.forEach(element => {
-                checked_set.add(element);
-                document.getElementById(`item-${element}-checked`).checked = true;
-            });
-            sub_list.forEach(element => {
-                checked_set.delete(element);
-                document.getElementById(`item-${element}-checked`).checked = false;
-            });
-            checked_list = [...checked_set];
+
+        function isMatchShowEatOption(index, showEatOption, checkedSet) {
+            switch (showEatOption) {
+                case '顯示所有':
+                    return true
+                case '還沒吃過':
+                    return !checkedSet.has(index);
+                case '已經吃過':
+                    return checkedSet.has(index);
+                default:
+                    console.error(`unhandled show-eat-option '${showEatOption}'`);
+                    return false;
+            }
         }
-        const progress_ratio = Math.round(checked_list.length / awesome_list.length * 100);
-        document.getElementById("progress-bar").style = `--value: ${progress_ratio}`;
-        document.getElementById("progress-bar").firstElementChild.innerHTML = `${progress_ratio}%`;
-        localStorage.setItem("checked_list", JSON.stringify(checked_list));
+
+        const searchKeyword = document.querySelector('#search-keyword').value.trim();
+        const showEatOption = document.querySelector('#show-eat-option').value;
+        const checkedSet = getItemCheckedSet();
+
+        let hitCnt = 0;
+        for (let i=0; i < awesome_list.length; ++i) {
+            const itemTr = document.querySelector(`#ramen-info-item-${i}`)
+            const item = awesome_list[i];
+
+            if (
+                (searchKeyword !== '' && !isMatchKeyword(searchKeyword, item))
+                || !isMatchShowEatOption(i, showEatOption, checkedSet)
+            ) {
+                itemTr.classList.add('u-hidden');
+            } else {
+                itemTr.classList.remove('u-hidden');
+                ++hitCnt;
+            }
+        }
+
+        const noResultTr = document.querySelector('#ramen-info-no-result');
+        if (hitCnt > 0)  {
+            noResultTr.classList.add('u-hidden');
+        } else {
+            noResultTr.classList.remove('u-hidden');
+        }
     }
-    function resetState() {
-        updateState([], [...Array(awesome_list.length).keys()]);
+
+    /**
+     * @param {!Array<number>} addList
+     * @param {!Array<number>} subList
+     */
+    function updateItemState(addList, subList) {
+        let checkedSet = getItemCheckedSet();
+
+        for (const index of addList) {
+            checkedSet.add(index);
+        }
+
+        for (const index of subList) {
+            checkedSet.delete(index);
+        }
+
+        const checkedList = [...checkedSet];
+        checkedList.sort();
+        localStorage.setItem("checked_list", JSON.stringify(checkedList));
     }
+
+    function refreshItemState() {
+        const checkedSet = getItemCheckedSet();
+
+        for (const index of awesome_list.keys()) {
+            document.querySelector(`#item-${index}-checked`).checked = checkedSet.has(index);
+        }
+
+        const progressRatio = Math.round(checkedSet.size / awesome_list.length * 100);
+        const progressBar = document.querySelector('#progress-bar');
+        progressBar.style = `--value: ${progressRatio}`;
+        progressBar.firstElementChild.innerHTML = `${progressRatio}%`;
+    }
+
+    function resetItemState() {
+        updateItemState([], [...Array(awesome_list.length).keys()]);
+        refreshItemState();
+        search();
+    }
+
     function gotoLucky() {
         const luckyID = "ramen-info-item-" + Math.floor(Math.random() * awesome_list.length);
         document.getElementById(luckyID).classList.add("is-indicated");
         location.hash = "#" + luckyID;
     }
+
     function changeItem(index) {
         if (document.getElementById(`item-${index}-checked`).checked) {
-            updateState([index], []);
+            updateItemState([index], []);
         }
         else {
-            updateState([], [index]);
+            updateItemState([], [index]);
         }
+
+        refreshItemState();
+        search();
     }
 
     function init() {
+        const items = [];
         awesome_list.forEach((element, index) => {
-            document.getElementById("ramen-info-list").innerHTML += `
+            items[index] = `
             <tr id="ramen-info-item-${index}">
                 <td>
                     <label class="ts-checkbox">
@@ -202,8 +263,19 @@
             </tr>
             `;
         });
+        items[awesome_list.length] = `
+            <tr id="ramen-info-no-result" class="u-hidden">
+                <td colspan="6" class="is-center-aligned">無資料</td>
+            </tr>`;
+        document.getElementById("ramen-info-list").innerHTML = items.join('');
         document.getElementById("skeleton").classList.add("u-hidden");
-        updateState([], [], refresh = true);
+        refreshItemState();
+
+        document.querySelector("#search-keyword").addEventListener('keyup', event => {
+            if (event.keyCode === 13) {
+                document.querySelector("#search-btn").click();
+            }
+        });
 
         window.onscroll = () => {
             const goPageTopBtn = document.querySelector("#go-page-top-btn");
