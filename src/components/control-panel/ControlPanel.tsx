@@ -2,12 +2,12 @@ import React from "react";
 import './ControlPanel.css';
 
 type Props = {
-    len: number
-}
+    total: number
+};
 
 function ControlPanel(props: Props) {
     const gotoLucky = () => {
-        const luckyID = "ramen-info-item-" + Math.floor(Math.random() * props.len);
+        const luckyID = "ramen-info-item-" + Math.floor(Math.random() * props.total);
         // FIXME: pass the state to the other components
         // document.getElementById(luckyID).classList.add("is-indicated");
         window.location.hash = "#" + luckyID;

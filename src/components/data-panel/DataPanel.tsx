@@ -2,7 +2,12 @@ import React from "react";
 import DataRow from "./DataRow";
 import ramenStores from '../../assets/awesome.json';
 
-const DataPanel = () => {
+type Props = {
+    callback: (checkedLength: number, totalLength: number) => void
+};
+
+function DataPanel(props: Props) {
+    props.callback(21, ramenStores.length);
     return (
         <div className="ts-box">
             <table className="ts-table is-celled is-striped">
