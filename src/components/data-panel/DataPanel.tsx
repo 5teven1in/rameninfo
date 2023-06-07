@@ -1,13 +1,32 @@
-import React from "react";
-import DataRow from "./DataRow";
+import React, { useEffect, useState } from "react";
 import ramenStores from '../../assets/awesome.json';
 
 type Props = {
     callback: (checkedLength: number, totalLength: number) => void
 };
 
+type RamenStore = {
+    name: string
+    reservation: string
+    waiting: string
+    tags: string
+};
+
 function DataPanel(props: Props) {
-    props.callback(21, ramenStores.length);
+    const [checkedLength, setCheckedLength] = useState(0);
+    const [checkList, setCheckList] = useState(Array<boolean>(ramenStores.length).fill(false));
+
+    useEffect(() => {
+        props.callback(checkedLength, ramenStores.length);
+    }, [props, checkedLength]);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+        const newCheckList = [...checkList];
+        newCheckList[idx] = event.target.checked;
+        setCheckList(newCheckList);
+        setCheckedLength(() => checkedLength + Number(event.target.checked) * 2 - 1);
+    }
+
     return (
         <div className="ts-box">
             <table className="ts-table is-celled is-striped">
@@ -23,8 +42,24 @@ function DataPanel(props: Props) {
                 </thead>
                 <tbody id="ramen-info-list">
                     {
-                        ramenStores.map((obj, idx) => {
-                            return <DataRow ramenStore={obj} idx={idx} key={idx} />;
+                        ramenStores.map((ramenStore: RamenStore, idx: number) => {
+                            return (
+                                <tr id={"ramen-info-item-" + idx} key={idx}>
+                                    <td>
+                                        <label className="ts-checkbox">
+                                            <input type="checkbox" id={"item-" + idx + "-checked"} onChange={e => handleChange(e, idx)} />
+                                        </label>
+                                    </td>
+                                    <td className="mobile:u-hidden"><span className="ts-icon is-battery-full-icon"></span></td>
+                                    <td>
+                                        <a href="https://google.com/" target="_blank"
+                                            rel="noreferrer">{ramenStore.name}</a>
+                                    </td>
+                                    <td>{ramenStore.reservation || "N/A"}</td>
+                                    <td>{ramenStore.waiting || "N/A"}</td>
+                                    <td className="mobile:u-hidden">{ramenStore.tags || "N/A"}</td>
+                                </tr>
+                            );
                         })
                     }
                 </tbody>

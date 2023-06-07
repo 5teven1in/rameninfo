@@ -8,7 +8,7 @@ import './App.css';
 function App() {
   const [isPageTop, setIsPageTop] = useState(true);
   const [checkedLength, setCheckedLength] = useState(0);
-  const [totalLength, setTotalLength] = useState(0);
+  const [totalLength, setTotalLength] = useState(1);
 
   useEffect(() => {
     window.addEventListener("scroll", () => setIsPageTop(window.pageYOffset === 0));
