@@ -1,9 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ramenStores from '../../assets/awesome.json';
-
-type Props = {
-    callback: (checkedLength: number, totalLength: number) => void
-};
 
 type RamenStore = {
     name: string
@@ -12,13 +8,41 @@ type RamenStore = {
     tags: string
 };
 
+type Props = {
+    callback: (checkedLength: number, totalLength: number) => void
+    showEatOption: string
+};
+
 function DataPanel(props: Props) {
     const [checkedLength, setCheckedLength] = useState(0);
     const [checkList, setCheckList] = useState(Array<boolean>(ramenStores.length).fill(false));
+    const [isHidden, setIsHidden] = useState(Array<boolean>(ramenStores.length).fill(false));
+
+    const updateLength = () => props.callback(checkedLength, ramenStores.length);
+    useEffect(updateLength, [updateLength, checkedLength]);
+
+    const hiddenLogic = useCallback(
+        (option: string) => {
+            return checkList.map((val) => {
+                switch (option) {
+                    case "顯示所有":
+                        return false;
+                    case "已經吃過":
+                        return !val;
+                    case "還沒吃過":
+                        return val;
+                    default:
+                        return false;
+                }
+            });
+        }, [checkList]);
+    useEffect(() => {
+        setIsHidden(() => hiddenLogic(props.showEatOption));
+    }, [props.showEatOption, hiddenLogic]);
 
     useEffect(() => {
-        props.callback(checkedLength, ramenStores.length);
-    }, [props, checkedLength]);
+        document.querySelector("#skeleton")?.classList.add("u-hidden");
+    }, []);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>, idx: number) => {
         const newCheckList = [...checkList];
@@ -44,7 +68,7 @@ function DataPanel(props: Props) {
                     {
                         ramenStores.map((ramenStore: RamenStore, idx: number) => {
                             return (
-                                <tr id={"ramen-info-item-" + idx} key={idx}>
+                                <tr id={"ramen-info-item-" + idx} className={isHidden[idx] ? "u-hidden" : ""} key={idx}>
                                     <td>
                                         <label className="ts-checkbox">
                                             <input type="checkbox" id={"item-" + idx + "-checked"} onChange={e => handleChange(e, idx)} />

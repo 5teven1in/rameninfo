@@ -3,15 +3,25 @@ import './ControlPanel.css';
 
 type Props = {
     total: number
+    callback: (showEatOption: string) => void
 };
 
 function ControlPanel(props: Props) {
+    const options = [
+        { value: "顯示所有", text: "顯示所有" },
+        { value: "已經吃過", text: "已經吃過" },
+        { value: "還沒吃過", text: "還沒吃過" }
+    ]
+
     const gotoLucky = () => {
         const luckyID = "ramen-info-item-" + Math.floor(Math.random() * props.total);
         // FIXME: pass the state to the other components
         // document.getElementById(luckyID).classList.add("is-indicated");
         window.location.hash = "#" + luckyID;
     };
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        props.callback(e.target.value);
+    }
     return (
         <div>
             <div id="search-area" className="ts-row">
@@ -40,10 +50,12 @@ function ControlPanel(props: Props) {
                     </select>
                 </div>
                 <div className="ts-select is-solid">
-                    <select id="show-eat-option">
-                        <option>顯示所有</option>
-                        <option>已經吃過</option>
-                        <option>還沒吃過</option>
+                    <select id="show-eat-option" onChange={e => handleChange(e)}>
+                        {
+                            options.map(option => (
+                                <option key={option.value} value={option.value}>{option.text}</option>
+                            ))
+                        }
                     </select>
                 </div>
                 <button className="ts-button is-icon is-negative is-outlined" data-toggle="modal:is-visible">

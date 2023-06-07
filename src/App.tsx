@@ -9,6 +9,7 @@ function App() {
   const [isPageTop, setIsPageTop] = useState(true);
   const [checkedLength, setCheckedLength] = useState(0);
   const [totalLength, setTotalLength] = useState(1);
+  const [showEatOption, setShowEatOption] = useState("顯示所有");
 
   useEffect(() => {
     window.addEventListener("scroll", () => setIsPageTop(window.pageYOffset === 0));
@@ -18,6 +19,9 @@ function App() {
   const getLength = (checked: number, total: number) => {
     setCheckedLength(checkedLength => checked);
     setTotalLength(totalLength => total);
+  }
+  const getOption = (_showEatOption: string) => {
+    setShowEatOption(showEatOption => _showEatOption);
   }
 
   return (
@@ -31,8 +35,8 @@ function App() {
       </div>
       <div id="main-blk" className="ts-content is-vertically-padded">
         <ProgressBar checked={checkedLength} total={totalLength} />
-        <ControlPanel total={totalLength} />
-        <DataPanel callback={getLength} />
+        <ControlPanel total={totalLength} callback={getOption} />
+        <DataPanel callback={getLength} showEatOption={showEatOption} />
       </div>
       <div id="go-page-top-btn" className={isPageTop ? "u-hidden" : ""}>
         <button onClick={goPageTop} className="ts-button is-icon" data-tooltip="回頂端">
