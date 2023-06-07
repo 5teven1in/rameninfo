@@ -225,7 +225,23 @@
     }
 
     function gotoLucky() {
-        const luckyID = "ramen-info-item-" + Math.floor(Math.random() * awesome_list.length);
+        for (const item of document.querySelectorAll('.is-indicated')) {
+            item.classList.remove('is-indicated');
+        }
+
+        const candidates = [];
+        for (const index of awesome_list.keys()) {
+            if (!document.querySelector(`#ramen-info-item-${index}`).classList.contains('u-hidden')) {
+                candidates.push(index);
+            }
+        }
+
+        if (candidates.length === 0) {
+            history.pushState(null, document.title, window.location.pathname + window.location.search);
+            return;
+        }
+
+        const luckyID = "ramen-info-item-" + candidates[Math.floor(Math.random() * candidates.length)];
         document.getElementById(luckyID).classList.add("is-indicated");
         location.hash = "#" + luckyID;
     }
