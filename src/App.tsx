@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ProgressBar from "./components/progress-bar/ProgressBar";
-import ControlPanel from "./components/control-panel/ControlPanel";
-import DataPanel from "./components/data-panel/DataPanel";
+import ProgressBar from "./components/ProgressBar";
+import ControlPanel from "./components/ControlPanel";
+import DataPanel from "./components/DataPanel";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import "tocas/dist/tocas.min.css";
 import "./App.css";
 
@@ -28,26 +30,13 @@ function App() {
 
   return (
     <div>
-      <div className="ts-app-topbar">
-        <div className="start">
-          <div className="item is-text">拉麵資訊.台灣</div>
-        </div>
-        <div className="end"></div>
-      </div>
+      <Header />
       <div id="main-blk" className="ts-content is-vertically-padded">
         <ProgressBar checked={checkedLength} total={totalLength} />
         <ControlPanel total={totalLength} callback={getOption} />
         <DataPanel callback={getLength} showEatOption={showEatOption} />
       </div>
-      <div id="go-page-top-btn" className={isPageTop ? "u-hidden" : ""}>
-        <button
-          onClick={goPageTop}
-          className="ts-button is-icon"
-          data-tooltip="回頂端"
-        >
-          <span className="ts-icon is-arrow-up-icon"></span>
-        </button>
-      </div>
+      <Footer isPageTop={isPageTop} goPageTop={goPageTop} />
     </div>
   );
 }
