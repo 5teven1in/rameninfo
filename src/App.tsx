@@ -4,17 +4,16 @@ import ControlPanel from "./components/ControlPanel";
 import DataPanel from "./components/DataPanel";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { CheckBox } from "./common/types";
 import "tocas/dist/tocas.min.css";
 import "./App.css";
 
 function App() {
-  const [checkedLength, setCheckedLength] = useState(0);
-  const [totalLength, setTotalLength] = useState(1);
+  const [checkList, setCheckList] = useState(Array<CheckBox>);
   const [showEatOption, setShowEatOption] = useState("顯示所有");
 
-  const getLength = (checked: number, total: number) => {
-    setCheckedLength((checkedLength) => checked);
-    setTotalLength((totalLength) => total);
+  const updateCheckList = (checkList: Array<CheckBox>) => {
+    setCheckList(() => checkList);
   };
   const getOption = (_showEatOption: string) => {
     setShowEatOption((showEatOption) => _showEatOption);
@@ -24,9 +23,12 @@ function App() {
     <div>
       <Header />
       <div id="main-blk" className="ts-content is-vertically-padded">
-        <ProgressBar checked={checkedLength} total={totalLength} />
-        <ControlPanel total={totalLength} callback={getOption} />
-        <DataPanel callback={getLength} showEatOption={showEatOption} />
+        <ProgressBar checkList={checkList} />
+        <ControlPanel checkList={checkList} callback={getOption} />
+        <DataPanel
+          updateCheckList={updateCheckList}
+          showEatOption={showEatOption}
+        />
       </div>
       <Footer />
     </div>

@@ -1,8 +1,8 @@
 import React, { CSSProperties } from "react";
+import { CheckBox } from "../../common/types";
 
 type Props = {
-  checked: number;
-  total: number;
+  checkList: Array<CheckBox>;
 };
 
 interface CSSPropertiesWithVars extends CSSProperties {
@@ -10,7 +10,11 @@ interface CSSPropertiesWithVars extends CSSProperties {
 }
 
 const ProgressBar = (props: Props) => {
-  const progress_ratio = Math.round((props.checked / props.total) * 100);
+  const checked = props.checkList.filter(
+      (checkBox: CheckBox) => checkBox.value
+    ).length,
+    len = props.checkList.length;
+  const progress_ratio = len === 0 ? 0 : Math.round((checked / len) * 100);
   return (
     <div className="ts-progress is-processing">
       <div

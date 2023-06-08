@@ -1,15 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { CheckBox, RamenStore } from "../../common/types";
 import ramenStores from "../../assets/awesome.json";
 
-type RamenStore = {
-  name: string;
-  reservation: string;
-  waiting: string;
-  tags: string;
-};
-
 type Props = {
-  callback: (checkedLength: number, totalLength: number) => void;
+  updateCheckList: (checkList: Array<CheckBox>) => void;
   showEatOption: string;
 };
 
@@ -22,8 +16,15 @@ function DataPanel(props: Props) {
     Array<boolean>(ramenStores.length).fill(false)
   );
 
-  const updateLength = () => props.callback(checkedLength, ramenStores.length);
-  useEffect(updateLength, [updateLength, checkedLength]);
+  const updateCheckList = useCallback(() => {
+    props.updateCheckList(
+      checkList.map((val, idx) => {
+        const checkBox: CheckBox = { id: idx, value: val };
+        return checkBox;
+      })
+    );
+  }, [checkList]);
+  useEffect(updateCheckList, [updateCheckList]);
 
   const hiddenLogic = useCallback(
     (option: string) => {

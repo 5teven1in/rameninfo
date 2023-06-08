@@ -1,8 +1,9 @@
 import React from "react";
 import "./ControlPanel.css";
+import { CheckBox } from "../../common/types";
 
 type Props = {
-  total: number;
+  checkList: Array<CheckBox>;
   callback: (showEatOption: string) => void;
 };
 
@@ -15,7 +16,7 @@ function ControlPanel(props: Props) {
 
   const gotoLucky = () => {
     const luckyID =
-      "ramen-info-item-" + Math.floor(Math.random() * props.total);
+      "ramen-info-item-" + Math.floor(Math.random() * props.checkList.length);
     // FIXME: pass the state to the other components
     // document.getElementById(luckyID).classList.add("is-indicated");
     window.location.hash = "#" + luckyID;
