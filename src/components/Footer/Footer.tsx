@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import "./Footer.css";
 
-type Props = {
-  isPageTop: boolean;
-  goPageTop: () => void;
-};
+function Footer() {
+  const [isPageTop, setIsPageTop] = useState(true);
 
-function Footer(props: Props) {
+  useEffect(() => {
+    window.addEventListener("scroll", () =>
+      setIsPageTop(window.pageYOffset === 0)
+    );
+  }, []);
+
+  const goPageTop = () => window.scrollTo(0, 0);
+
   return (
-    <div id="go-page-top-btn" className={props.isPageTop ? "u-hidden" : ""}>
+    <div id="go-page-top-btn" className={isPageTop ? "u-hidden" : ""}>
       <button
-        onClick={props.goPageTop}
+        onClick={goPageTop}
         className="ts-button is-icon"
         data-tooltip="回頂端"
       >
