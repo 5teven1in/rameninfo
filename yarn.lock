@@ -8781,11 +8781,6 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-tocas@^4.2.3:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/tocas/-/tocas-4.2.3.tgz#4476e5453a298f22b672137e3a9b43528e615067"
-  integrity sha512-+Lhga6UwVsJbtMgKhwiIuGYHfgztaANTHtMeCi9exCPdU8759PAg82ewkVj7zeG9uDhWJeGFUjF3u+6PKF4AQw==
-
 toidentifier@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
