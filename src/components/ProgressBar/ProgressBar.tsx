@@ -20,7 +20,9 @@ const ProgressBar = (props: Props) => {
       <div
         id="progress-bar"
         style={
-          { "--value": progress_ratio } as unknown as CSSPropertiesWithVars
+          {
+            "--value": progress_ratio,
+          } as CSSProperties as CSSPropertiesWithVars
         }
         className="bar"
       >
