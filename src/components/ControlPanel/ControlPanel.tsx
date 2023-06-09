@@ -51,6 +51,9 @@ function ControlPanel(props: Props) {
     controlOption.eaten = e.target.value as Eaten;
     props.updateControlOption(controlOption);
   };
+  const handleClick = () => {
+    localStorage.removeItem("checkList");
+  };
 
   return (
     <div>
@@ -123,6 +126,7 @@ function ControlPanel(props: Props) {
               <button
                 className="ts-button is-negative is-outlined"
                 data-toggle="modal:is-visible"
+                onClick={handleClick}
               >
                 確定
               </button>
