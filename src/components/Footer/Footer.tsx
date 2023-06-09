@@ -5,9 +5,7 @@ function Footer() {
   const [isPageTop, setIsPageTop] = useState(true);
 
   useEffect(() => {
-    window.addEventListener("scroll", () =>
-      setIsPageTop(window.pageYOffset === 0)
-    );
+    window.addEventListener("scroll", () => setIsPageTop(window.scrollY === 0));
   }, []);
 
   const goPageTop = () => window.scrollTo(0, 0);
