@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./ControlPanel.css";
 import { CheckBox, Eaten, Opening, ControlOption } from "../../common/types";
 
@@ -18,10 +18,15 @@ function ControlPanel(props: Props) {
     { value: Eaten.Yes, text: Eaten.Yes },
     { value: Eaten.No, text: Eaten.No },
   ];
+
+  const searchRef = useRef<HTMLInputElement>(null);
+  const openingRef = useRef<HTMLSelectElement>(null);
+  const eatenRef = useRef<HTMLSelectElement>(null);
+
   const controlOption: ControlOption = {
-    search: "",
-    opening: Opening.Default,
-    eaten: Eaten.Default,
+    search: searchRef.current?.value || "",
+    opening: openingRef.current?.value as Opening,
+    eaten: eatenRef.current?.value as Eaten,
   };
 
   const gotoLucky = () => {
@@ -34,12 +39,16 @@ function ControlPanel(props: Props) {
     document.querySelector(luckyID)?.classList.add("is-indicated");
     window.location.hash = luckyID;
   };
-  const handleEatenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    controlOption.eaten = e.target.value as Eaten;
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    controlOption.search = e.target.value;
     props.updateControlOption(controlOption);
   };
   const handleOpeningChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     controlOption.opening = e.target.value as Opening;
+    props.updateControlOption(controlOption);
+  };
+  const handleEatenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    controlOption.eaten = e.target.value as Eaten;
     props.updateControlOption(controlOption);
   };
 
@@ -49,9 +58,13 @@ function ControlPanel(props: Props) {
         <div className="column is-fluid">
           <div className="ts-input is-fluid">
             <input
+              ref={searchRef}
               type="text"
               className="input"
               placeholder="豚骨 / 雞白 / 沾麵 / 名店 / ..."
+              onChange={(e) => {
+                handleSearchChange(e);
+              }}
             />
           </div>
         </div>
@@ -75,7 +88,7 @@ function ControlPanel(props: Props) {
         className="ts-wrap is-center-aligned is-middle-aligned"
       >
         <div className="ts-select is-solid">
-          <select onChange={(e) => handleOpeningChange(e)}>
+          <select ref={openingRef} onChange={(e) => handleOpeningChange(e)}>
             {openingOption.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.text}
@@ -84,7 +97,7 @@ function ControlPanel(props: Props) {
           </select>
         </div>
         <div className="ts-select is-solid">
-          <select onChange={(e) => handleEatenChange(e)}>
+          <select ref={eatenRef} onChange={(e) => handleEatenChange(e)}>
             {eatenOption.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.text}

@@ -31,25 +31,32 @@ function DataPanel(props: Props) {
   useEffect(updateCheckList, [updateCheckList]);
 
   const hiddenLogic = useCallback(
-    (option: string) => {
-      return checkList.map((val) => {
-        switch (option) {
-          case Eaten.Default:
-            return false;
-          case Eaten.Yes:
-            return !val;
-          case Eaten.No:
-            return val;
-          default:
-            return false;
-        }
-      });
+    (controOption: ControlOption) => {
+      return checkList
+        .map((val) => {
+          switch (controOption.eaten) {
+            case Eaten.Default:
+              return false;
+            case Eaten.Yes:
+              return !val;
+            case Eaten.No:
+              return val;
+            default:
+              return false;
+          }
+        })
+        .map((val, idx) => {
+          if (val) return val;
+          return !Object.values(ramenStores[idx])
+            .join()
+            .includes(controOption.search);
+        });
     },
     [checkList]
   );
   useEffect(() => {
-    setIsHidden(() => hiddenLogic(props.controlOption.eaten));
-  }, [props.controlOption.eaten, hiddenLogic]);
+    setIsHidden(() => hiddenLogic(props.controlOption));
+  }, [props.controlOption, hiddenLogic]);
 
   useEffect(() => {
     document.querySelector("#skeleton")?.classList.add("u-hidden");
