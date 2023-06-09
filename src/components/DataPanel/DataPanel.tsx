@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { CheckBox, RamenStore } from "../../common/types";
+import { CheckBox, RamenStore, Eaten, ControlOption } from "../../common/types";
 import ramenStores from "../../assets/awesome.json";
 
 type Props = {
   updateCheckList: (checkList: Array<CheckBox>) => void;
-  showEatOption: string;
+  controlOption: ControlOption;
 };
 
 function DataPanel(props: Props) {
@@ -19,22 +19,26 @@ function DataPanel(props: Props) {
   const updateCheckList = useCallback(() => {
     props.updateCheckList(
       checkList.map((val, idx) => {
-        const checkBox: CheckBox = { id: idx, value: val };
+        const checkBox: CheckBox = {
+          id: idx,
+          value: val,
+          isHidden: isHidden[idx],
+        };
         return checkBox;
       })
     );
-  }, [checkList]);
+  }, [checkList, isHidden]);
   useEffect(updateCheckList, [updateCheckList]);
 
   const hiddenLogic = useCallback(
     (option: string) => {
       return checkList.map((val) => {
         switch (option) {
-          case "顯示所有":
+          case Eaten.Default:
             return false;
-          case "已經吃過":
+          case Eaten.Yes:
             return !val;
-          case "還沒吃過":
+          case Eaten.No:
             return val;
           default:
             return false;
@@ -44,8 +48,8 @@ function DataPanel(props: Props) {
     [checkList]
   );
   useEffect(() => {
-    setIsHidden(() => hiddenLogic(props.showEatOption));
-  }, [props.showEatOption, hiddenLogic]);
+    setIsHidden(() => hiddenLogic(props.controlOption.eaten));
+  }, [props.controlOption.eaten, hiddenLogic]);
 
   useEffect(() => {
     document.querySelector("#skeleton")?.classList.add("u-hidden");

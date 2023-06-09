@@ -1,29 +1,48 @@
 import React from "react";
 import "./ControlPanel.css";
-import { CheckBox } from "../../common/types";
+import { CheckBox, Eaten, Opening, ControlOption } from "../../common/types";
 
 type Props = {
   checkList: Array<CheckBox>;
-  callback: (showEatOption: string) => void;
+  updateControlOption: (controlOption: ControlOption) => void;
 };
 
 function ControlPanel(props: Props) {
-  const options = [
-    { value: "顯示所有", text: "顯示所有" },
-    { value: "已經吃過", text: "已經吃過" },
-    { value: "還沒吃過", text: "還沒吃過" },
+  const openingOption = [
+    { value: Opening.Default, text: Opening.Default },
+    { value: Opening.Today, text: Opening.Today },
+    { value: Opening.Now, text: Opening.Now },
   ];
+  const eatenOption = [
+    { value: Eaten.Default, text: Eaten.Default },
+    { value: Eaten.Yes, text: Eaten.Yes },
+    { value: Eaten.No, text: Eaten.No },
+  ];
+  const controlOption: ControlOption = {
+    search: "",
+    opening: Opening.Default,
+    eaten: Eaten.Default,
+  };
 
   const gotoLucky = () => {
+    const visibleCheckList = props.checkList.filter(
+      (checkBox) => !checkBox.isHidden
+    );
     const luckyID =
-      "ramen-info-item-" + Math.floor(Math.random() * props.checkList.length);
-    // FIXME: pass the state to the other components
-    // document.getElementById(luckyID).classList.add("is-indicated");
-    window.location.hash = "#" + luckyID;
+      "#ramen-info-item-" +
+      visibleCheckList[Math.floor(Math.random() * visibleCheckList.length)].id;
+    document.querySelector(luckyID)?.classList.add("is-indicated");
+    window.location.hash = luckyID;
   };
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    props.callback(e.target.value);
+  const handleEatenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    controlOption.eaten = e.target.value as Eaten;
+    props.updateControlOption(controlOption);
   };
+  const handleOpeningChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    controlOption.opening = e.target.value as Opening;
+    props.updateControlOption(controlOption);
+  };
+
   return (
     <div>
       <div id="search-area" className="ts-row">
@@ -56,15 +75,17 @@ function ControlPanel(props: Props) {
         className="ts-wrap is-center-aligned is-middle-aligned"
       >
         <div className="ts-select is-solid">
-          <select>
-            <option>不限時間</option>
-            <option>今日營業</option>
-            <option>現在營業</option>
+          <select onChange={(e) => handleOpeningChange(e)}>
+            {openingOption.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.text}
+              </option>
+            ))}
           </select>
         </div>
         <div className="ts-select is-solid">
-          <select id="show-eat-option" onChange={(e) => handleChange(e)}>
-            {options.map((option) => (
+          <select onChange={(e) => handleEatenChange(e)}>
+            {eatenOption.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.text}
               </option>
