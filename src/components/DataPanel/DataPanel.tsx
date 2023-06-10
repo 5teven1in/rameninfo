@@ -8,55 +8,54 @@ type Props = {
 };
 
 function DataPanel(props: Props) {
-  const [checkedLength, setCheckedLength] = useState(0);
-  const [checkList, setCheckList] = useState(
-    Array<boolean>(ramenStores.length).fill(false)
-  );
-  const [isHidden, setIsHidden] = useState(
-    Array<boolean>(ramenStores.length).fill(false)
-  );
-
-  const updateCheckList = useCallback(() => {
-    props.updateCheckList(
-      checkList.map((val, idx) => {
-        const checkBox: CheckBox = {
-          id: idx,
-          value: val,
-          isHidden: isHidden[idx],
-        };
-        return checkBox;
-      })
+  const [checkList, setCheckList] = useState<Array<CheckBox>>(() => {
+    const savedCheckList = JSON.parse(
+      window.localStorage.getItem("checkList") || "[]"
     );
-  }, [checkList, isHidden]);
-  useEffect(updateCheckList, [updateCheckList]);
-
-  const hiddenLogic = useCallback(
-    (controOption: ControlOption) => {
-      return checkList
-        .map((val) => {
-          switch (controOption.eaten) {
-            case Eaten.Default:
-              return false;
-            case Eaten.Yes:
-              return !val;
-            case Eaten.No:
-              return val;
-            default:
-              return false;
-          }
-        })
-        .map((val, idx) => {
-          if (val) return val;
-          return !Object.values(ramenStores[idx])
-            .join()
-            .includes(controOption.search);
-        });
-    },
-    [checkList]
+    if (savedCheckList.length === ramenStores.length) {
+      return savedCheckList;
+    }
+    return Array.from({ length: ramenStores.length }, (_, idx) => {
+      return { id: idx, value: false, isHidden: false } as CheckBox;
+    });
+  });
+  const [isHidden, setIsHidden] = useState(
+    Array<boolean>(checkList.length).fill(false)
   );
+
+  const updateVisible = useCallback(() => {
+    const controlOption = props.controlOption;
+    return checkList
+      .map((checkBox: CheckBox) => {
+        const checked = checkBox.value;
+        switch (controlOption.eaten) {
+          case Eaten.Default:
+            return false;
+          case Eaten.Yes:
+            return !checked;
+          case Eaten.No:
+            return checked;
+        }
+      })
+      .map((isHidden: boolean, idx: number) => {
+        if (isHidden) return true;
+        return !Object.values(ramenStores[idx])
+          .join()
+          .includes(controlOption.search);
+      });
+  }, [props.controlOption, checkList]);
+
   useEffect(() => {
-    setIsHidden(() => hiddenLogic(props.controlOption));
-  }, [props.controlOption, hiddenLogic]);
+    setIsHidden(updateVisible);
+    window.localStorage.setItem("checkList", JSON.stringify(checkList));
+    const newCheckList = [...checkList].map(
+      (checkBox: CheckBox, idx: number) => {
+        checkBox.isHidden = isHidden[idx];
+        return checkBox;
+      }
+    );
+    props.updateCheckList(newCheckList);
+  }, [updateVisible]);
 
   useEffect(() => {
     document.querySelector("#skeleton")?.classList.add("u-hidden");
@@ -66,12 +65,11 @@ function DataPanel(props: Props) {
     event: React.ChangeEvent<HTMLInputElement>,
     idx: number
   ) => {
-    const newCheckList = [...checkList];
-    newCheckList[idx] = event.target.checked;
-    setCheckList(newCheckList);
-    setCheckedLength(
-      () => checkedLength + Number(event.target.checked) * 2 - 1
-    );
+    setCheckList((checkList) => {
+      const newCheckList = [...checkList];
+      newCheckList[idx].value = event.target.checked;
+      return newCheckList;
+    });
   };
 
   return (
@@ -99,8 +97,10 @@ function DataPanel(props: Props) {
                   <label className="ts-checkbox">
                     <input
                       type="checkbox"
-                      id={"item-" + idx + "-checked"}
-                      onChange={(e) => handleChange(e, idx)}
+                      checked={checkList[idx].value}
+                      onChange={(e) => {
+                        handleChange(e, idx);
+                      }}
                     />
                   </label>
                 </td>
