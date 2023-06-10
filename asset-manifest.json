@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/rameninfo/static/css/main.4168028c.css",
+    "main.js": "/rameninfo/static/js/main.c6333dd3.js",
+    "static/js/787.55274286.chunk.js": "/rameninfo/static/js/787.55274286.chunk.js",
+    "index.html": "/rameninfo/index.html",
+    "main.4168028c.css.map": "/rameninfo/static/css/main.4168028c.css.map",
+    "main.c6333dd3.js.map": "/rameninfo/static/js/main.c6333dd3.js.map",
+    "787.55274286.chunk.js.map": "/rameninfo/static/js/787.55274286.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4168028c.css",
+    "static/js/main.c6333dd3.js"
+  ]
+}
