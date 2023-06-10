@@ -2,6 +2,7 @@
   "name": "rameninfo",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://ss8651twtw.github.io/rameninfo",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -10,6 +11,7 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "gh-pages": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -24,7 +26,9 @@
     "lint:check": "eslint --ext=ts,tsx src/",
     "lint": "eslint --fix --ext=ts,tsx src/",
     "format:check": "prettier . --check --ignore-unknown",
-    "format": "prettier . --write --ignore-unknown"
+    "format": "prettier . --write --ignore-unknown",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
