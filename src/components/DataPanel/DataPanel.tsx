@@ -1,6 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CheckBox, RamenStore, Eaten, ControlOption } from "../../common/types";
 import ramenStores from "../../assets/awesome.json";
+import {
+  strName,
+  strOpening,
+  strReservation,
+  strTags,
+  strWaiting,
+} from "../../common/constants";
 
 type Props = {
   updateCheckList: (checkList: Array<CheckBox>) => void;
@@ -78,11 +85,11 @@ function DataPanel(props: Props) {
         <thead>
           <tr>
             <th className="is-collapsed"></th>
-            <th className="is-collapsed mobile:u-hidden">營業時間</th>
-            <th>名稱</th>
-            <th>預約</th>
-            <th>排隊登記</th>
-            <th className="mobile:u-hidden">標籤</th>
+            <th className="is-collapsed mobile:u-hidden">{strOpening}</th>
+            <th>{strName}</th>
+            <th>{strReservation}</th>
+            <th>{strWaiting}</th>
+            <th className="mobile:u-hidden">{strTags}</th>
           </tr>
         </thead>
         <tbody id="ramen-info-list">

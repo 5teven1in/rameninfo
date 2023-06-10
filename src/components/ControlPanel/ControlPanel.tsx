@@ -1,6 +1,16 @@
 import React, { useRef } from "react";
-import "./ControlPanel.css";
 import { CheckBox, Eaten, Opening, ControlOption } from "../../common/types";
+import {
+  eatenOption,
+  openingOption,
+  strClose,
+  strConfirm,
+  strLucky,
+  strResetData,
+  strSearch,
+  strSearchPlaceholder,
+} from "../../common/constants";
+import "./ControlPanel.css";
 
 type Props = {
   checkList: Array<CheckBox>;
@@ -8,17 +18,6 @@ type Props = {
 };
 
 function ControlPanel(props: Props) {
-  const openingOption = [
-    { value: Opening.Default, text: Opening.Default },
-    { value: Opening.Today, text: Opening.Today },
-    { value: Opening.Now, text: Opening.Now },
-  ];
-  const eatenOption = [
-    { value: Eaten.Default, text: Eaten.Default },
-    { value: Eaten.Yes, text: Eaten.Yes },
-    { value: Eaten.No, text: Eaten.No },
-  ];
-
   const searchRef = useRef<HTMLInputElement>(null);
   const openingRef = useRef<HTMLSelectElement>(null);
   const eatenRef = useRef<HTMLSelectElement>(null);
@@ -64,7 +63,7 @@ function ControlPanel(props: Props) {
               ref={searchRef}
               type="text"
               className="input"
-              placeholder="豚骨 / 雞白 / 沾麵 / 名店 / ..."
+              placeholder={strSearchPlaceholder}
               onChange={(e) => {
                 handleSearchChange(e);
               }}
@@ -72,7 +71,7 @@ function ControlPanel(props: Props) {
           </div>
         </div>
         <div className="column">
-          <button className="ts-button is-icon" data-tooltip="搜尋">
+          <button className="ts-button is-icon" data-tooltip={strSearch}>
             <span className="ts-icon is-magnifying-glass-icon"></span>
           </button>
         </div>
@@ -80,7 +79,7 @@ function ControlPanel(props: Props) {
           <button
             onClick={gotoLucky}
             className="ts-button is-icon"
-            data-tooltip="好手氣"
+            data-tooltip={strLucky}
           >
             <span className="ts-icon is-shuffle-icon"></span>
           </button>
@@ -117,9 +116,9 @@ function ControlPanel(props: Props) {
         <div className="ts-modal" data-name="modal">
           <div className="content">
             <div className="ts-content is-padded">
-              <p>你確定要清除所有資料嗎？</p>
-              <p>你確定要清除所有資料嗎？</p>
-              <p>你確定要清除所有資料嗎？</p>
+              <p>{strResetData}</p>
+              <p>{strResetData}</p>
+              <p>{strResetData}</p>
             </div>
             <div className="ts-divider"></div>
             <div className="ts-content is-tertiary is-horizontally-padded is-end-aligned">
@@ -128,10 +127,10 @@ function ControlPanel(props: Props) {
                 data-toggle="modal:is-visible"
                 onClick={handleClick}
               >
-                確定
+                {strConfirm}
               </button>
               <button className="ts-button" data-toggle="modal:is-visible">
-                關閉
+                {strClose}
               </button>
             </div>
           </div>

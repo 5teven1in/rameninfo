@@ -27,4 +27,5 @@ export type ControlOption = {
   search: string;
   opening: Opening;
   eaten: Eaten;
+  reset?: boolean;
 };

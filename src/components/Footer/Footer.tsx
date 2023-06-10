@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { strGoPageTop } from "../../common/constants";
 import "./Footer.css";
 
 function Footer() {
@@ -15,7 +16,7 @@ function Footer() {
       <button
         onClick={goPageTop}
         className="ts-button is-icon"
-        data-tooltip="回頂端"
+        data-tooltip={strGoPageTop}
       >
         <span className="ts-icon is-arrow-up-icon"></span>
       </button>

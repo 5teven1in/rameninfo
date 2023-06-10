@@ -4,16 +4,13 @@ import ControlPanel from "./components/ControlPanel";
 import DataPanel from "./components/DataPanel";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { CheckBox, ControlOption, Eaten, Opening } from "./common/types";
+import { CheckBox, ControlOption } from "./common/types";
+import { defaultControlOption } from "./common/constants";
 import "./App.css";
 
 function App() {
   const [checkList, setCheckList] = useState(Array<CheckBox>);
-  const [controlOption, setControlOption] = useState({
-    search: "",
-    opening: Opening.Default,
-    eaten: Eaten.Default,
-  } as ControlOption);
+  const [controlOption, setControlOption] = useState(defaultControlOption);
 
   const updateCheckList = (checkList: Array<CheckBox>) => {
     setCheckList(() => checkList);
