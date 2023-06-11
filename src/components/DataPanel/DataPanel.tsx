@@ -116,7 +116,7 @@ function DataPanel(props: Props) {
                 </td>
                 <td>
                   <a
-                    href="https://google.com/"
+                    href={ramenStore.googleMap}
                     target="_blank"
                     rel="noreferrer"
                   >

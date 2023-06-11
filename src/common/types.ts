@@ -21,6 +21,7 @@ export type RamenStore = {
   reservation: string;
   waiting: string;
   tags: string;
+  googleMap: string;
 };
 
 export type ControlOption = {
