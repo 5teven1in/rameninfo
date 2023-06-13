@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { CheckBox, RamenStore, Eaten, ControlOption } from "../../common/types";
 import ramenStores from "../../assets/awesome.json";
 import {
+  ramenInfoItemPrefix,
   strName,
   strOpening,
   strReservation,
@@ -26,9 +27,6 @@ function DataPanel(props: Props) {
       return { id: idx, value: false, isHidden: false } as CheckBox;
     });
   });
-  const [isHidden, setIsHidden] = useState(
-    Array<boolean>(checkList.length).fill(false)
-  );
 
   const updateVisible = useCallback(() => {
     const controlOption = props.controlOption;
@@ -53,8 +51,8 @@ function DataPanel(props: Props) {
   }, [props.controlOption, checkList]);
 
   useEffect(() => {
-    setIsHidden(updateVisible);
     window.localStorage.setItem("checkList", JSON.stringify(checkList));
+    const isHidden = updateVisible();
     const newCheckList = [...checkList].map(
       (checkBox: CheckBox, idx: number) => {
         checkBox.isHidden = isHidden[idx];
@@ -96,8 +94,8 @@ function DataPanel(props: Props) {
           {ramenStores.map((ramenStore: RamenStore, idx: number) => {
             return (
               <tr
-                id={"ramen-info-item-" + idx}
-                className={isHidden[idx] ? "u-hidden" : ""}
+                id={ramenInfoItemPrefix + idx}
+                className={checkList[idx].isHidden ? "u-hidden" : ""}
                 key={idx}
               >
                 <td>

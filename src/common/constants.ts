@@ -19,6 +19,8 @@ export const eatenOption = [
   { value: Eaten.No, text: Eaten.No },
 ];
 
+export const ramenInfoItemPrefix = "r";
+
 export const strTitle = "拉麵資訊.台灣";
 export const strGoPageTop = "回頂端";
 export const strSearchPlaceholder = "豚骨 / 雞白 / 沾麵 / 名店 / ...";
