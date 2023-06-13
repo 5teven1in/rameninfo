@@ -3,6 +3,7 @@ import { CheckBox, Eaten, Opening, ControlOption } from "../../common/types";
 import {
   eatenOption,
   openingOption,
+  ramenInfoItemPrefix,
   strClose,
   strConfirm,
   strLucky,
@@ -33,7 +34,8 @@ function ControlPanel(props: Props) {
       (checkBox) => !checkBox.isHidden
     );
     const luckyID =
-      "#ramen-info-item-" +
+      "#" +
+      ramenInfoItemPrefix +
       visibleCheckList[Math.floor(Math.random() * visibleCheckList.length)].id;
     document.querySelector(luckyID)?.classList.add("is-indicated");
     window.location.hash = luckyID;
