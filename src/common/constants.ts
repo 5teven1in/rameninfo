@@ -4,7 +4,6 @@ export const defaultControlOption: ControlOption = {
   search: "",
   opening: Opening.Default,
   eaten: Eaten.Default,
-  reset: false,
 };
 
 export const openingOption = [

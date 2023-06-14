@@ -12,10 +12,21 @@ import {
 
 type Props = {
   updateCheckList: (checkList: Array<CheckBox>) => void;
+  updateResetCheckList: (resetCheckList: () => void) => void;
   controlOption: ControlOption;
 };
 
 function DataPanel(props: Props) {
+  const emptyCheckList = () => {
+    return Array.from({ length: ramenStores.length }, (_, idx) => {
+      return { id: idx, value: false, isHidden: false } as CheckBox;
+    }) as Array<CheckBox>;
+  };
+  const resetCheckList = () => {
+    setCheckList(() => {
+      return emptyCheckList();
+    });
+  };
   const [checkList, setCheckList] = useState<Array<CheckBox>>(() => {
     const savedCheckList = JSON.parse(
       window.localStorage.getItem("checkList") || "[]"
@@ -23,9 +34,7 @@ function DataPanel(props: Props) {
     if (savedCheckList.length === ramenStores.length) {
       return savedCheckList;
     }
-    return Array.from({ length: ramenStores.length }, (_, idx) => {
-      return { id: idx, value: false, isHidden: false } as CheckBox;
-    });
+    return emptyCheckList();
   });
 
   const updateVisible = useCallback(() => {
@@ -63,6 +72,7 @@ function DataPanel(props: Props) {
   }, [updateVisible]);
 
   useEffect(() => {
+    props.updateResetCheckList(resetCheckList);
     document.querySelector("#skeleton")?.classList.add("u-hidden");
   }, []);
 
