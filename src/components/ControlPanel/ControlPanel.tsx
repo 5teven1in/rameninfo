@@ -16,6 +16,7 @@ import "./ControlPanel.css";
 type Props = {
   checkList: Array<CheckBox>;
   updateControlOption: (controlOption: ControlOption) => void;
+  resetCheckList: () => void;
 };
 
 function ControlPanel(props: Props) {
@@ -54,6 +55,7 @@ function ControlPanel(props: Props) {
   };
   const handleClick = () => {
     localStorage.removeItem("checkList");
+    props.resetCheckList();
   };
 
   return (
