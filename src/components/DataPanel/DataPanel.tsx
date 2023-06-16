@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import OpeningTimeAccordion from "./OpeningTimeAccordion";
 import { CheckBox, RamenStore, Eaten, ControlOption } from "../../common/types";
 import ramenStores from "../../assets/awesome.json";
 import {
@@ -9,6 +10,7 @@ import {
   strTags,
   strWaiting,
 } from "../../common/constants";
+import "./DataPanel.css";
 
 type Props = {
   updateCheckList: (checkList: Array<CheckBox>) => void;
@@ -94,7 +96,12 @@ function DataPanel(props: Props) {
         <thead>
           <tr>
             <th className="is-collapsed"></th>
-            <th className="is-collapsed mobile:u-hidden">{strOpening}</th>
+            <th
+              id="data-panel-th-opening-time"
+              className="is-collapsed mobile:u-hidden"
+            >
+              {strOpening}
+            </th>
             <th>{strName}</th>
             <th>{strReservation}</th>
             <th>{strWaiting}</th>
@@ -106,7 +113,10 @@ function DataPanel(props: Props) {
             return (
               <tr
                 id={ramenInfoItemPrefix + idx}
-                className={checkList[idx].isHidden ? "u-hidden" : ""}
+                className={
+                  (checkList[idx].isHidden ? "u-hidden" : "") +
+                  " is-middle-aligned"
+                }
                 key={idx}
               >
                 <td>
@@ -121,7 +131,7 @@ function DataPanel(props: Props) {
                   </label>
                 </td>
                 <td className="mobile:u-hidden">
-                  <span className="ts-icon is-battery-full-icon"></span>
+                  <OpeningTimeAccordion openingTime={ramenStore.openingTime} />
                 </td>
                 <td>
                   <a

@@ -33,3 +33,17 @@ export const strName = "名稱";
 export const strReservation = "預約";
 export const strWaiting = "排隊登記";
 export const strTags = "標籤";
+export const strOtherInfo = "其它資訊";
+
+export const strOpeningTimeRest = "休息";
+
+export const strStoreClosed = "已打烊";
+export const strStoreClosedTime = "結束營業時間";
+export const strStoreNextOpenTime = "下次營業時間";
+export const strStoreOpen = "營業中";
+export const strStoreOpen24Hours = "24 小時營業";
+export const strStoreStartToOpenTime = "開始營業時間";
+
+export const strColon = "：";
+export const strDash = "–";
+export const strDotOperator = "⋅";

@@ -16,12 +16,19 @@ export type CheckBox = {
   isHidden: boolean;
 };
 
+export type OpeningTime = {
+  closedMessage: string | null;
+  days: Array<Array<string>> | null;
+  note: string | null;
+};
+
 export type RamenStore = {
   name: string;
   reservation: string;
   waiting: string;
   tags: string;
   googleMap: string;
+  openingTime: OpeningTime;
 };
 
 export type ControlOption = {

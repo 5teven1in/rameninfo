@@ -1,0 +1,7 @@
+#opening-time-accordion-table :is(tr, th, td) {
+  border: none;
+}
+
+.store-open {
+  color: var(--ts-positive-700);
+}
