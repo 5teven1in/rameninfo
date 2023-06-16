@@ -132,6 +132,18 @@ function DataPanel(props: Props) {
         </thead>
         <tbody id="ramen-info-list">
           {ramenStores.map((ramenStore: RamenStore, idx: number) => {
+            const siteLinks = [];
+            if (ramenStore.fb !== null) {
+              siteLinks.push({ url: ramenStore.fb, iconName: "facebook" });
+            }
+
+            if (ramenStore.instagram !== null) {
+              siteLinks.push({
+                url: ramenStore.instagram,
+                iconName: "instagram",
+              });
+            }
+
             return (
               <tr
                 id={ramenInfoItemPrefix + idx}
@@ -154,6 +166,27 @@ function DataPanel(props: Props) {
                 </td>
                 <td className="mobile:u-hidden">
                   <OpeningTimeAccordion openingTime={ramenStore.openingTime} />
+                  <div className="ts-wrap">
+                    {siteLinks.map(
+                      (
+                        { url, iconName }: { url: string; iconName: string },
+                        idx: number
+                      ) => {
+                        return (
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            key={idx}
+                          >
+                            <span
+                              className={`ts-icon is-square-${iconName}-icon is-huge`}
+                            ></span>
+                          </a>
+                        );
+                      }
+                    )}
+                  </div>
                 </td>
                 <td>
                   <a

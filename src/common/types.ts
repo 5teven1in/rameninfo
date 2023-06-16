@@ -29,6 +29,8 @@ export type RamenStore = {
   tags: string;
   googleMap: string;
   openingTime: OpeningTime;
+  fb: string | null;
+  instagram: string | null;
 };
 
 export type ControlOption = {
