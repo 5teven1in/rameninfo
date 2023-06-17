@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/rameninfo/static/css/main.4168028c.css",
-    "main.js": "/rameninfo/static/js/main.c476f073.js",
+    "main.js": "/rameninfo/static/js/main.a34c70ff.js",
     "static/js/496.c5dc6eff.chunk.js": "/rameninfo/static/js/496.c5dc6eff.chunk.js",
     "index.html": "/rameninfo/index.html",
     "main.4168028c.css.map": "/rameninfo/static/css/main.4168028c.css.map",
-    "main.c476f073.js.map": "/rameninfo/static/js/main.c476f073.js.map",
+    "main.a34c70ff.js.map": "/rameninfo/static/js/main.a34c70ff.js.map",
     "496.c5dc6eff.chunk.js.map": "/rameninfo/static/js/496.c5dc6eff.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4168028c.css",
-    "static/js/main.c476f073.js"
+    "static/js/main.a34c70ff.js"
   ]
 }
