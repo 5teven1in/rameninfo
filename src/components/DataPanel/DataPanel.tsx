@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import OpeningTimeAccordion from "./OpeningTimeAccordion";
-import { CheckBox, RamenStore, Eaten, ControlOption } from "../../common/types";
+import {
+  CheckBox,
+  ControlOption,
+  Eaten,
+  Opening,
+  RamenStore,
+} from "../../common/types";
 import ramenStores from "../../assets/awesome.json";
 import {
   ramenInfoItemPrefix,
@@ -10,6 +16,7 @@ import {
   strTags,
   strWaiting,
 } from "../../common/constants";
+import { getOpeningStatus } from "../../common/openingTime";
 import "./DataPanel.css";
 
 type Props = {
@@ -59,6 +66,21 @@ function DataPanel(props: Props) {
           .join()
           .toLowerCase()
           .includes(controlOption.search.toLowerCase());
+      })
+      .map((isHidden: boolean, idx: number) => {
+        if (isHidden) return true;
+
+        const daysTimes = ramenStores[idx].openingTime.days;
+        switch (controlOption.opening) {
+          case Opening.Default:
+            return false;
+          case Opening.Today:
+            return (
+              daysTimes === null || !getOpeningStatus(daysTimes).hasOpeningTime
+            );
+          case Opening.Now:
+            return daysTimes === null || !getOpeningStatus(daysTimes).isOpen;
+        }
       });
   }, [props.controlOption, checkList]);
 
