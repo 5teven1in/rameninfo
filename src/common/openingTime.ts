@@ -13,6 +13,7 @@ export function getOpeningStatus(daysTimes: Array<Array<string>>): {
   isOpen24Hour: boolean;
   closedTime: string;
   nextOpenTime: string;
+  hasOpeningTime: boolean;
 } {
   const now = new Date();
   const daysTimesFormatted = formatOpeningDaysTimes(daysTimes);
@@ -22,6 +23,7 @@ export function getOpeningStatus(daysTimes: Array<Array<string>>): {
     isOpen24Hour: isOpen24HoursAtTime(daysTimesFormatted, now),
     closedTime: getClosedTime(daysTimesFormatted, now),
     nextOpenTime: getNextOpenTime(daysTimesFormatted, now),
+    hasOpeningTime: hasOpeningTimeOnDayOfWeek(daysTimesFormatted, now.getDay()),
   };
 }
 
@@ -90,6 +92,13 @@ function getTimeStr(time: Date): string {
     minute: "2-digit",
     hourCycle: "h23",
   });
+}
+
+function hasOpeningTimeOnDayOfWeek(
+  openingTimeRangesDaysOfWeek: OpeningTimeRangesDaysOfWeek,
+  dayOfWeek: number
+): boolean {
+  return openingTimeRangesDaysOfWeek[dayOfWeek].length > 0;
 }
 
 function isInTimeRange(time: string, timeRange: OpeningTimeRange): boolean {
