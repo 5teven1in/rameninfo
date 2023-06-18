@@ -55,7 +55,8 @@ function DataPanel(props: Props) {
         if (isHidden) return true;
         return !Object.values(ramenStores[idx])
           .join()
-          .includes(controlOption.search);
+          .toLowerCase()
+          .includes(controlOption.search.toLowerCase());
       });
   }, [props.controlOption, checkList]);
 
