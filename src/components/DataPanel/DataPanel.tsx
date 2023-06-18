@@ -54,7 +54,8 @@ function DataPanel(props: Props) {
       .map((isHidden: boolean, idx: number) => {
         if (isHidden) return true;
         return !Object.values(ramenStores[idx])
-          .join().toLowerCase()
+          .join()
+          .toLowerCase()
           .includes(controlOption.search.toLowerCase());
       });
   }, [props.controlOption, checkList]);
