@@ -20,20 +20,21 @@ export const eatenOption = [
 
 export const ramenInfoItemPrefix = "r";
 
-export const strTitle = "拉麵資訊.台灣";
-export const strGoPageTop = "回頂端";
-export const strSearchPlaceholder = "豚骨 / 雞白 / 沾麵 / 名店 / ...";
-export const strSearch = "搜尋";
-export const strLucky = "好手氣";
-export const strResetData = "你確定要清除所有資料嗎？";
-export const strConfirm = "確定";
 export const strClose = "關閉";
-export const strOpening = "營業時間";
+export const strConfirm = "確定";
+export const strEmptyResult = "無資料";
+export const strGoPageTop = "回頂端";
+export const strLucky = "好手氣";
 export const strName = "名稱";
-export const strReservation = "預約";
-export const strWaiting = "排隊登記";
-export const strTags = "標籤";
+export const strOpening = "營業時間";
 export const strOtherInfo = "其它資訊";
+export const strReservation = "預約";
+export const strResetData = "你確定要清除所有資料嗎？";
+export const strSearch = "搜尋";
+export const strSearchPlaceholder = "豚骨 / 雞白 / 沾麵 / 名店 / ...";
+export const strTags = "標籤";
+export const strTitle = "拉麵資訊.台灣";
+export const strWaiting = "排隊登記";
 
 export const strOpeningTimeRest = "休息";
 

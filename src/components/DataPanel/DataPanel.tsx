@@ -10,6 +10,7 @@ import {
 import ramenStores from "../../assets/awesome.json";
 import {
   ramenInfoItemPrefix,
+  strEmptyResult,
   strName,
   strOpening,
   strReservation,
@@ -131,78 +132,95 @@ function DataPanel(props: Props) {
           </tr>
         </thead>
         <tbody id="ramen-info-list">
-          {ramenStores.map((ramenStore: RamenStore, idx: number) => {
-            const siteLinks = [];
-            if (ramenStore.fb !== null) {
-              siteLinks.push({ url: ramenStore.fb, iconName: "facebook" });
-            }
-
-            if (ramenStore.instagram !== null) {
-              siteLinks.push({
-                url: ramenStore.instagram,
-                iconName: "instagram",
-              });
-            }
-
-            return (
-              <tr
-                id={ramenInfoItemPrefix + idx}
-                className={
-                  (checkList[idx].isHidden ? "u-hidden" : "") +
-                  " is-middle-aligned"
+          {checkList.some((element) => !element.isHidden)
+            ? ramenStores.map((ramenStore: RamenStore, idx: number) => {
+                const siteLinks = [];
+                if (ramenStore.fb !== null) {
+                  siteLinks.push({ url: ramenStore.fb, iconName: "facebook" });
                 }
-                key={idx}
-              >
-                <td>
-                  <label className="ts-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={checkList[idx].value}
-                      onChange={(e) => {
-                        handleChange(e, idx);
-                      }}
-                    />
-                  </label>
-                </td>
-                <td className="mobile:u-hidden">
-                  <OpeningTimeAccordion openingTime={ramenStore.openingTime} />
-                  <div className="ts-wrap">
-                    {siteLinks.map(
-                      (
-                        { url, iconName }: { url: string; iconName: string },
-                        idx: number
-                      ) => {
-                        return (
-                          <a
-                            href={url}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            key={idx}
-                          >
-                            <span
-                              className={`ts-icon is-square-${iconName}-icon is-huge`}
-                            ></span>
-                          </a>
-                        );
-                      }
-                    )}
-                  </div>
-                </td>
-                <td>
-                  <a
-                    href={ramenStore.googleMap}
-                    target="_blank"
-                    rel="noreferrer"
+
+                if (ramenStore.instagram !== null) {
+                  siteLinks.push({
+                    url: ramenStore.instagram,
+                    iconName: "instagram",
+                  });
+                }
+
+                return (
+                  <tr
+                    id={ramenInfoItemPrefix + idx}
+                    className={
+                      (checkList[idx].isHidden ? "u-hidden" : "") +
+                      " is-middle-aligned"
+                    }
+                    key={idx}
                   >
-                    {ramenStore.name}
-                  </a>
-                </td>
-                <td>{ramenStore.reservation || "N/A"}</td>
-                <td>{ramenStore.waiting || "N/A"}</td>
-                <td className="mobile:u-hidden">{ramenStore.tags || "N/A"}</td>
-              </tr>
-            );
-          })}
+                    <td>
+                      <label className="ts-checkbox">
+                        <input
+                          type="checkbox"
+                          checked={checkList[idx].value}
+                          onChange={(e) => {
+                            handleChange(e, idx);
+                          }}
+                        />
+                      </label>
+                    </td>
+                    <td className="mobile:u-hidden">
+                      <OpeningTimeAccordion
+                        openingTime={ramenStore.openingTime}
+                      />
+                      <div className="ts-wrap">
+                        {siteLinks.map(
+                          (
+                            {
+                              url,
+                              iconName,
+                            }: { url: string; iconName: string },
+                            idx: number
+                          ) => {
+                            return (
+                              <a
+                                href={url}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                key={idx}
+                              >
+                                <span
+                                  className={`ts-icon is-square-${iconName}-icon is-huge`}
+                                ></span>
+                              </a>
+                            );
+                          }
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <a
+                        href={ramenStore.googleMap}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {ramenStore.name}
+                      </a>
+                    </td>
+                    <td>{ramenStore.reservation || "N/A"}</td>
+                    <td>{ramenStore.waiting || "N/A"}</td>
+                    <td className="mobile:u-hidden">
+                      {ramenStore.tags || "N/A"}
+                    </td>
+                  </tr>
+                );
+              })
+            : (() => {
+                return (
+                  <tr>
+                    <td colSpan={6} className="is-center-aligned">
+                      {strEmptyResult}
+                    </td>
+                  </tr>
+                );
+              })()}
         </tbody>
       </table>
       <div className="ts-wrap is-center-aligned">
