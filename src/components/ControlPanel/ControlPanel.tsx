@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CheckBox, Eaten, Opening, ControlOption } from "../../common/types";
 import {
   eatenOption,
@@ -23,6 +23,7 @@ function ControlPanel(props: Props) {
   const searchRef = useRef<HTMLInputElement>(null);
   const openingRef = useRef<HTMLSelectElement>(null);
   const eatenRef = useRef<HTMLSelectElement>(null);
+  const [isEmptyResult, setIsEmptyResult] = useState<boolean>(false);
 
   const controlOption: ControlOption = {
     search: searchRef.current?.value || "",
@@ -30,10 +31,19 @@ function ControlPanel(props: Props) {
     eaten: eatenRef.current?.value as Eaten,
   };
 
+  useEffect(() => {
+    setIsEmptyResult(!props.checkList.some((checkBox) => !checkBox.isHidden));
+  }, [props.checkList]);
+
   const gotoLucky = () => {
     const visibleCheckList = props.checkList.filter(
       (checkBox) => !checkBox.isHidden
     );
+
+    if (visibleCheckList.length === 0) {
+      return;
+    }
+
     const luckyID =
       "#" +
       ramenInfoItemPrefix +
@@ -82,8 +92,11 @@ function ControlPanel(props: Props) {
         <div className="column">
           <button
             onClick={gotoLucky}
-            className="ts-button is-icon"
+            className={
+              "ts-button is-icon" + (isEmptyResult ? " is-disabled" : "")
+            }
             data-tooltip={strLucky}
+            disabled={isEmptyResult}
           >
             <span className="ts-icon is-shuffle-icon"></span>
           </button>
