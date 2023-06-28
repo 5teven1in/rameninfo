@@ -36,6 +36,7 @@ function ControlPanel(props: Props) {
   }, [props.checkList]);
 
   const gotoLucky = () => {
+    document.querySelector(".is-indicated")?.classList.remove("is-indicated");
     const visibleCheckList = props.checkList.filter(
       (checkBox) => !checkBox.isHidden
     );
