@@ -1,46 +1,55 @@
-# Getting Started with Create React App
+# Ramen Info
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+這個網站是一個提供台灣拉麵資訊的平台。使用者可以在這裡瀏覽不同地區的拉麵店家資訊，包括營業時間、預約、排隊登記方式等等。
 
-## Available Scripts
+## 功能
 
-In the project directory, you can run:
+- 顯示拉麵店家資訊：使用者可以瀏覽各個地區精選的拉麵店家列表，並查看每個店家的詳細資訊。
+- 搜尋拉麵店家：使用者可以使用搜尋功能來快速找到特定的拉麵店家，並根據不同條件進行篩選。
+    - 全文檢索各項欄位包含名稱、預約、排隊登記以及標籤。
+    - 篩選營業時間：不限時間、今日營業、現在營業。
+    - 篩選是否吃過：顯示所有、已經吃過、還沒吃過。
 
-### `yarn start`
+## 安裝和執行
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+以下是在本機環境中安裝和執行這個網站的步驟：
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. 複製專案程式碼到您的本機：
 
-### `yarn test`
+```shell
+git clone https://github.com/ss8651twtw/rameninfo.git
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. 進入專案資料夾：
 
-### `yarn build`
+```shell
+cd rameninfo
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. 安裝相依套件：
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```shell
+yarn install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. 啟動開發伺服器：
 
-### `yarn eject`
+```shell
+yarn start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+5. 在瀏覽器中開啟網站：
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+網站將在 `http://localhost:3000` 上運行。
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 貢獻
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+如果您有興趣貢獻並改進這個網站，歡迎提出 Pull Request。請確保遵守程式碼風格指南並提供相應的測試。
 
-## Learn More
+## 授權
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+這個網站的程式碼授權為 [MIT License](LICENSE)。請在使用程式碼前閱讀並遵守相應的授權條款。
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 聯絡我們
+
+如果您有任何問題或建議，歡迎與我們聯絡。
