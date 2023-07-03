@@ -36,6 +36,18 @@ export const strTags = "標籤";
 export const strTitle = "拉麵資訊.台灣";
 export const strWaiting = "排隊登記";
 
+export const strErrorFileInvalidFormat = "檔案格式錯誤";
+export const strErrorFileNoInput = "未選擇檔案";
+export const strErrorSystem = "系統錯誤";
+
+export const strRecordDelete = "紀錄刪除";
+export const strRecordDeleteSuccess = "紀錄刪除成功";
+export const strRecordExport = "紀錄匯出";
+export const strRecordExportSuccess = "紀錄匯出成功";
+export const strRecordImport = "紀錄匯入";
+export const strRecordImportSuccess = "紀錄匯入成功";
+export const strSettings = "設定";
+
 export const strOpeningTimeRest = "休息";
 
 export const strStoreClosed = "已打烊";

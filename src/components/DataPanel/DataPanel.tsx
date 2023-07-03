@@ -22,7 +22,7 @@ import "./DataPanel.css";
 
 type Props = {
   updateCheckList: (checkList: Array<CheckBox>) => void;
-  updateResetCheckList: (resetCheckList: () => void) => void;
+  updateReloadCheckList: (reloadCheckList: () => void) => void;
   controlOption: ControlOption;
 };
 
@@ -32,19 +32,28 @@ function DataPanel(props: Props) {
       return { id: idx, value: false, isHidden: false } as CheckBox;
     }) as Array<CheckBox>;
   };
-  const resetCheckList = () => {
-    setCheckList(() => {
-      return emptyCheckList();
-    });
-  };
-  const [checkList, setCheckList] = useState<Array<CheckBox>>(() => {
+
+  const loadCheckList = () => {
     const savedCheckList = JSON.parse(
       window.localStorage.getItem("checkList") || "[]"
     );
+    for (const item of savedCheckList) {
+      item["isHidden"] = false;
+    }
     if (savedCheckList.length === ramenStores.length) {
       return savedCheckList;
     }
     return emptyCheckList();
+  };
+
+  const reloadCheckList = () => {
+    setCheckList(() => {
+      return loadCheckList();
+    });
+  };
+
+  const [checkList, setCheckList] = useState<Array<CheckBox>>(() => {
+    return loadCheckList();
   });
 
   const updateVisible = useCallback(() => {
@@ -86,7 +95,13 @@ function DataPanel(props: Props) {
   }, [props.controlOption, checkList]);
 
   useEffect(() => {
-    window.localStorage.setItem("checkList", JSON.stringify(checkList));
+    const savedCheckList = checkList.map((checkBox: CheckBox) => {
+      return {
+        id: checkBox.id,
+        value: checkBox.value,
+      };
+    });
+    window.localStorage.setItem("checkList", JSON.stringify(savedCheckList));
     const isHidden = updateVisible();
     const newCheckList = [...checkList].map(
       (checkBox: CheckBox, idx: number) => {
@@ -98,7 +113,7 @@ function DataPanel(props: Props) {
   }, [updateVisible]);
 
   useEffect(() => {
-    props.updateResetCheckList(resetCheckList);
+    props.updateReloadCheckList(reloadCheckList);
     document.querySelector("#skeleton")?.classList.add("u-hidden");
   }, []);
 

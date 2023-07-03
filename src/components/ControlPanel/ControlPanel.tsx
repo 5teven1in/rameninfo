@@ -4,10 +4,7 @@ import {
   eatenOption,
   openingOption,
   ramenInfoItemPrefix,
-  strClose,
-  strConfirm,
   strLucky,
-  strResetData,
   strSearch,
   strSearchPlaceholder,
 } from "../../common/constants";
@@ -16,7 +13,6 @@ import "./ControlPanel.css";
 type Props = {
   checkList: Array<CheckBox>;
   updateControlOption: (controlOption: ControlOption) => void;
-  resetCheckList: () => void;
 };
 
 function ControlPanel(props: Props) {
@@ -63,10 +59,6 @@ function ControlPanel(props: Props) {
   const handleEatenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     controlOption.eaten = e.target.value as Eaten;
     props.updateControlOption(controlOption);
-  };
-  const handleClick = () => {
-    localStorage.removeItem("checkList");
-    props.resetCheckList();
   };
 
   return (
@@ -124,34 +116,6 @@ function ControlPanel(props: Props) {
               </option>
             ))}
           </select>
-        </div>
-        <button
-          className="ts-button is-icon is-negative is-outlined"
-          data-toggle="modal:is-visible"
-        >
-          <span className="ts-icon is-trash-icon"></span>
-        </button>
-        <div className="ts-modal" data-name="modal">
-          <div className="content">
-            <div className="ts-content is-padded">
-              <p>{strResetData}</p>
-              <p>{strResetData}</p>
-              <p>{strResetData}</p>
-            </div>
-            <div className="ts-divider"></div>
-            <div className="ts-content is-tertiary is-horizontally-padded is-end-aligned">
-              <button
-                className="ts-button is-negative is-outlined"
-                data-toggle="modal:is-visible"
-                onClick={handleClick}
-              >
-                {strConfirm}
-              </button>
-              <button className="ts-button" data-toggle="modal:is-visible">
-                {strClose}
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
