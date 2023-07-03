@@ -11,7 +11,7 @@ import "./App.css";
 function App() {
   const [checkList, setCheckList] = useState(Array<CheckBox>);
   const [controlOption, setControlOption] = useState(defaultControlOption);
-  const resetCheckList = useRef(() => {
+  const reloadCheckList = useRef(() => {
     return;
   });
 
@@ -21,24 +21,23 @@ function App() {
   const updateControlOption = (controlOption: ControlOption) => {
     setControlOption(() => controlOption);
   };
-  const updateResetCheckList = (callback: () => void) => {
-    resetCheckList.current = callback;
+  const updateReloadCheckList = (callback: () => void) => {
+    reloadCheckList.current = callback;
   };
 
   return (
     <div>
-      <Header />
+      <Header reloadCheckList={reloadCheckList.current} />
       <div id="main-blk" className="ts-content is-vertically-padded">
         <ProgressBar checkList={checkList} />
         <ControlPanel
           checkList={checkList}
           updateControlOption={updateControlOption}
-          resetCheckList={resetCheckList.current}
         />
         <DataPanel
           controlOption={controlOption}
           updateCheckList={updateCheckList}
-          updateResetCheckList={updateResetCheckList}
+          updateReloadCheckList={updateReloadCheckList}
         />
       </div>
       <Footer />
