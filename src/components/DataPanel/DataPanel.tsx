@@ -72,7 +72,14 @@ function DataPanel(props: Props) {
       })
       .map((isHidden: boolean, idx: number) => {
         if (isHidden) return true;
-        return !Object.values(ramenStores[idx])
+
+        const ramenStore = ramenStores[idx];
+        return ![
+          ramenStore.name,
+          ramenStore.reservation,
+          ramenStore.waiting,
+          ramenStore.tags,
+        ]
           .join()
           .toLowerCase()
           .includes(controlOption.search.toLowerCase());
